@@ -8,21 +8,41 @@ struct Book {
 };
 
 void main(void) {
-    struct Book *p = NULL;
-
-    // 구조체 동적 메모리 할당
-    p = (struct Book *)malloc(sizeof(struct Book));
-    if (p == NULL) {
-        printf("구조체 메모리 할당 오류!\n");
+    int i;
+    struct Book **bookshelf;   
+    
+    bookshelf = (struct Book **)malloc(10 * sizeof(struct Book *));
+    if (bookshelf == NULL) {
+        printf("구조체 포인터 배열 동적 할당 오류!\n");
         exit(1);
     }
 
-    p->number = 1;
-    strcpy(p->title, "C Prog");  // 10byte 제약 → 짧게
+  
+    for (i = 0; i < 10; i++) {
+        bookshelf[i] = (struct Book *)malloc(sizeof(struct Book));
+        if (bookshelf[i] == NULL) {
+            printf("구조체 동적 할당 오류!\n");
+            exit(1);
+        }
+    }
 
-    printf("Book 번호 : %d\n", p->number);
-    printf("Book 제목 : %s\n", p->title);
+    
+    bookshelf[0]->number = 5;
+    strcpy(bookshelf[0]->title, "C Prog");
 
-    free(p);
+    bookshelf[1]->number = 3;
+    strcpy(bookshelf[1]->title, "CommTh");  
+
+   
+    printf("%d : %s\n", bookshelf[0]->number, bookshelf[0]->title);
+    printf("%d : %s\n", bookshelf[1]->number, bookshelf[1]->title);
+
+
+    for (i = 0; i < 10; i++) {
+        free(bookshelf[i]);
+    }
+    free(bookshelf);
+
+    return;
 }
 
